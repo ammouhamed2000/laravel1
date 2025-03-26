@@ -16,19 +16,20 @@ use App\Http\Controllers\LoginApiController;
 */
 Route::group(['prefix' => 'auth'], function () {
 
-    Route::post('/login', action: [LoginApiController::class, 'login'])->name('login.store');
+    Route::post('/login',  [LoginApiController::class, 'login'])->name('login.store');
+    Route::get('/login',  [LoginApiController::class, 'loginIndex'])->name('login');
 
-    Route::post('/register', action: [LoginApiController::class, 'register'])->name('register.store');
+    Route::post('/register',  [LoginApiController::class, 'register'])->name('register.store');
 
-    Route::post('/forgot_password', action: [LoginApiController::class, 'forgot'])->name('forgot_password.store');
+    Route::post('/forgot_password',  [LoginApiController::class, 'forgot'])->name('forgot_password.store');
 
 });
 Route::group(['middleware' => 'auth:sanctum','prefix' => 'auth'], function () {
 
-    Route::get('/', action: [LoginApiController::class, 'user'])->name('user.index');;
+    Route::get('/',  [LoginApiController::class, 'user'])->name('user.index');;
 
-    Route::post('/complete_profile', action: [LoginApiController::class, 'complete_profile'])->name('complete_profile.store');
+    Route::post('/complete_profile',  [LoginApiController::class, 'complete_profile'])->name('complete_profile.store');
 
-    Route::post('/logout', action: [LoginApiController::class, 'logout'])->name('logout');
+    Route::post('/logout',  [LoginApiController::class, 'logout'])->name('logout');
 
 });
