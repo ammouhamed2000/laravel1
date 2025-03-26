@@ -20,6 +20,10 @@ class LoginApiController extends Controller
         $user->profile_image = url('/uploads/cover_image/').'/'.$user->profile_image;
         return response()->json([$user],200);
     }
+    public function loginIndex(Request $request)
+    {
+        return response()->json(['You are not authenticated to access this resource'],500);
+    }
     public function login(Request $request)
     {
         $credentials = $request->validate([
