@@ -22,7 +22,9 @@ class LoginApiController extends Controller
     }
     public function loginIndex(Request $request)
     {
-        return response()->json(['You are not authenticated to access this resource'],500);
+        return response()->json([
+            "message" => 'You are not authenticated to access this resource'
+        ],500);
     }
     public function login(Request $request)
     {
@@ -66,10 +68,10 @@ class LoginApiController extends Controller
                 } else {
                     $code = 422; // Unprocessable
                 }
-                $msg['msg'] = $errors->first('email');
+                $msg['message'] = $errors->first('email');
             } else {
                 $code = 422; // Unprocessable
-                $msg['msg'] = $errors->first();
+                $msg['message'] = $errors->first();
             }
     
             return response()->json($msg, $code);
@@ -113,8 +115,7 @@ class LoginApiController extends Controller
             'profile_image' => ['mimes:jpeg,png,jpg,webp|max:5048'],
         ]);
         if ($validator->fails()) {
-            $msg['status'] = 'error';
-            $msg['msg']  = $validator->errors()->first();
+            $msg['message']  = $validator->errors()->first();
             return response()->json($msg,422);
         }
         $name_cover = null;
@@ -151,9 +152,7 @@ class LoginApiController extends Controller
     public function logout(Request $request)
     {
         auth()->user()->currentAccessToken()->delete();
-        return response()->json([
-            'status' => true,
-        ],200);
+        return response()->json([],200);
     }
 
     public function forgot(Request $request)
