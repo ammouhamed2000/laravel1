@@ -11,13 +11,13 @@ use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Image;
-
+use Illuminate\Support\Facades\File;
 class LoginApiController extends Controller
 {
     public function user(Request $request)
     {
         $user = Auth::user();
-        $user->profile_image = url('/uploads/cover_image/hd_').$user->profile_image;
+        $user->profile_image = url('/uploads/cover_image/').'/'.$user->profile_image;
         return response()->json([$user],200);
     }
     public function login(Request $request)
@@ -114,24 +114,23 @@ class LoginApiController extends Controller
             return response()->json($msg,422);
         }
         $name_cover = null;
-        if(!empty($request->profile_image))
-        {
-          $path = public_path('uploads/cover_image/');
-  
-           !(file_exists($path)) && mkdir($path, 0777, true);
-           $image = Image::make($request->profile_image);
-           $uniqe_id = uniqid();
-  
-           $name_cover =  $uniqe_id . '_' . str_replace(' ', '',$request->profile_image->getClientOriginalName());
-  
-           $name_cover_hdf =  'hd_' . $uniqe_id . '_' . str_replace(' ', '',$request->profile_image->getClientOriginalName());
-  
-           $image->widen(250, function ($constraint) {
-            $constraint->aspectRatio();
-            $constraint->upsize();
-          });
-           $image->save($path.$name_cover_hdf);
+
+
+        if ($request->hasFile('profile_image')) {
+            $file = $request->file('profile_image');
+            $name_cover = time() . '_' . $file->getClientOriginalName();
+            $destinationPath = public_path('uploads/cover_image/');
+
+            if (!File::exists($destinationPath)) {
+                File::makeDirectory($destinationPath, 0755, true);
+            }
+
+            $file->move($destinationPath, $name_cover); 
+
+            $url = asset('uploads/cover_image/' . $name_cover); 
+
         }
+
 
         $user = Auth::user();
         $user->name           = $request->name;
