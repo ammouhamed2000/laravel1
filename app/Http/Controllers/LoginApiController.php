@@ -33,6 +33,7 @@ class LoginApiController extends Controller
             'password' => ['required'],
         ]);
 
+
         // Login & validation 
         if (!Auth()->attempt($credentials)) {
             return response()->json([], 401);
@@ -111,6 +112,7 @@ class LoginApiController extends Controller
     {
         $validator = \Validator::make($request->all(),[
             'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
             'phone' => ['max:255'],
             'profile_image' => ['mimes:jpeg,png,jpg,webp|max:5048'],
         ]);
