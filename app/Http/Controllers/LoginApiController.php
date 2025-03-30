@@ -111,8 +111,8 @@ class LoginApiController extends Controller
     public function complete_profile(Request $request)
     {
         $validator = \Validator::make($request->all(),[
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255'],
+        //    'name' => ['required', 'string', 'max:255'],
+        //      'email' => ['required', 'email', 'max:255'],
             'phone' => ['max:255'],
             'profile_image' => ['mimes:jpeg,png,jpg,webp|max:5048'],
         ]);
@@ -140,8 +140,12 @@ class LoginApiController extends Controller
 
 
         $user = Auth::user();
-        $user->name           = $request->name;
-        $user->email          = $request->email;
+        if ($request->name) {
+            $user->name           = $request->name;
+        }
+        if ($request->email) {
+            $user->email           = $request->email;
+        }
         $user->gender         = (bool) $request->gender;
         $user->phone          = $request->phone;
         $user->latitude       = $request->latitude;
