@@ -113,9 +113,9 @@ class LoginApiController extends Controller
         $validator = \Validator::make($request->all(),[
         //    'name' => ['required', 'string', 'max:255'],
         //      'email' => ['required', 'email', 'max:255'],
-            'phone' => ['max:255'],
-            'profile_image' => ['mimes:jpeg,png,jpg,webp|max:5048'],
-        ]);
+        'phone' => ['nullable', 'string', 'max:30'],
+        'profile_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5048'],
+            ]);
         if ($validator->fails()) {
             $msg['message']  = $validator->errors()->first();
             return response()->json($msg,422);
